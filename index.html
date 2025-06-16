@@ -15,18 +15,34 @@
     <!-- Componenti React -->
     <script type="text/babel">
         const AnimalList = () => {
-            const animals = ["Elefante", "Leone", "Giraffa", "Pinguino", "Ippopotamo"];
+            const { useState } = React;
+            const [animals, setAnimals] = useState([]);
+            const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+
+            const getRandomAnimal = () => {
+                const randomAnimal = animalsChoices[Math.floor(Math.random() * animalsChoices.length)]
+                if (!animals.includes(randomAnimal)) {
+                    setAnimals([...animals, randomAnimal])
+                } else {
+                    console.log("Animale già presente");
+                }
+
+            }
+
             return (
-                <details>
-                    <summary>
-                        <h1> Animali </h1>
-                    </summary>
-                    <ul>
-                        {animals.map(a => (
-                            <li key={a}>{a}</li>
-                        ))}
-                    </ul>
-                </details>
+                <main>
+                    <button onClick={getRandomAnimal}> Aggiungi animale </button>
+                    <details>
+                        <summary>
+                            <h1> Animali </h1>
+                        </summary>
+                        <ul>
+                            {animals.map(a => (
+                                <li key={a}>{a}</li>
+                            ))}
+                        </ul>
+                    </details>
+                </main>
             )
         }
     </script>
