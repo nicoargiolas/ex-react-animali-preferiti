@@ -14,24 +14,48 @@
 
     <!-- Componenti React -->
     <script type="text/babel">
+        function Modal({
+            title,
+            content,
+            setContent,
+            show = false,
+            onClose = () => { },
+            onConfirm = () => { }
+        }) {
+            return show && ReactDOM.createPortal(
+                <div className="modal-container">
+                    <div className="modal">
+                        <h2>{title}</h2>
+                        <input type="text" value={content} onChange={(e) => setContent(e.target.value)} />
+                        <div>
+                            <button onClick={onClose}>Annulla</button>
+                            <button onClick={onConfirm}>Conferma</button>
+                        </div>
+                    </div>
+                </div>,
+                document.body
+            )
+        }
+
         const AnimalList = () => {
             const { useState } = React;
             const [animals, setAnimals] = useState([]);
             const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
 
-            const getRandomAnimal = () => {
-                const randomAnimal = animalsChoices[Math.floor(Math.random() * animalsChoices.length)]
-                if (!animals.includes(randomAnimal)) {
-                    setAnimals([...animals, randomAnimal])
-                } else {
-                    console.log("Animale già presente");
-                }
+            const [show, setShow] = useState(false);
+            const [newAnimal, setNewAnimal] = useState("");
 
-            }
+            // const getRandomAnimal = () => {
+            //     const randomAnimal = animalsChoices[Math.floor(Math.random() * animalsChoices.length)]
+            //     if (!animals.includes(randomAnimal)) {
+            //         setAnimals([...animals, randomAnimal])
+            //     } else {
+            //         console.log("Animale già presente");
+            //     }}
 
             return (
                 <main>
-                    <button onClick={getRandomAnimal}> Aggiungi animale </button>
+                    <button onClick={() => setShow(true)}> Aggiungi animale </button>
                     <details>
                         <summary>
                             <h1> Animali </h1>
@@ -42,6 +66,18 @@
                             ))}
                         </ul>
                     </details>
+                    <Modal
+                        title="titolo"
+                        content={newAnimal}
+                        setContent={setNewAnimal}
+                        show={show}
+                        onClose={() => setShow(false)}
+                        onConfirm={() => {
+                            setAnimals([...animals, newAnimal]);
+                            setShow(false);
+                            setNewAnimal("")
+                        }}
+                    />
                 </main>
             )
         }
