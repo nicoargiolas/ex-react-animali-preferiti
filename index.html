@@ -73,6 +73,7 @@
                         show={show}
                         onClose={() => setShow(false)}
                         onConfirm={() => {
+                            if (!newAnimal) return;
                             setAnimals([...animals, newAnimal]);
                             setShow(false);
                             setNewAnimal("")
